@@ -6,7 +6,7 @@ import http from 'http';
 import { hri } from 'human-readable-ids';
 import Router from 'koa-router';
 
-import ClientManager from './lib/ClientManager';
+import ClientManager from './lib/ClientManager.js';
 
 const debug = Debug('localtunnel:server');
 
@@ -126,7 +126,8 @@ export default function(opt) {
             return;
         }
 
-        const clientId = GetClientIdFromHostname(hostname);
+        const id = req.url && req.url.startsWith('/to/') ? [req.url.slice(4).split('/')[0], hostname].join('.') : hostname;
+        const clientId = GetClientIdFromHostname(id);
         if (!clientId) {
             appCallback(req, res);
             return;
